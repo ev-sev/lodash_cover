@@ -19,6 +19,10 @@ _.compact = compact;
 function isArray(a) {
     return a instanceof Array;  //stub
 }
+function isFunction(a) {
+    return a instanceof Function; //stub
+}
+
 
 function toarray(x) {
     if (isArray(x)) return x;
@@ -51,13 +55,7 @@ _.difference = difference;
 
 function differenceBy(array, ...diff) { 
     let iteratee = (x)=>x;
-    let iteratee_ = diff.pop();
-    if (isArray(iteratee_)) diff.push(iteratee_);
-    else {
-        if (typeof iteratee_ == "string") iteratee = (a)=>a[iteratee_];//shorthand expr - stub!
-        else
-            if (iteratee_ instanceof Function) iteratee = iteratee_;
-    }
+    if (isFunction(last(diff))) iteratee = diff.pop();
     diff = diff.filter(isArray); 
     diff = concat([], ...diff);
     
@@ -87,7 +85,7 @@ function makeNotFunction(f) {
 
 function differenceWith(array, ...diff) { 
     let comparator = (x, y)=>x==y;
-    if (diff[diff.length-1] instanceof Function) {
+    if (last(array) instanceof Function) {
         comparator = diff.pop();
     }
     diff = diff.filter(isArray); 
@@ -106,3 +104,25 @@ function dropRight(array, n = 1) { //как это работает в стан�
     return array.slice(0, (n == 0)? array.length:  -n);
 }
 _.dropRight = dropRight
+
+function head(array) {
+    return array[0];
+}
+_.head = head;
+
+function last(array) {
+    return array[array.length - 1];
+}
+_.last = last;
+
+function flatten(array) {
+    function pushArray(a, p) {
+        if (isArray(p)) p.forEach((x)=>a.push(x));
+        else a.push(p);
+    }
+    let result = [];
+    array.forEach((x)=>pushArray(result, x));
+    return result;
+}
+
+_.flatten = flatten;
