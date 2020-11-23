@@ -80,7 +80,7 @@ function makeComaparatorArrayToOne(array, comparatorOneToOne) {
 
 // makeNotFunction - на входе функция с возвращаемым значением логического типа, на выходе новая функция - логическая инверсия входной функции
 function makeNotFunction(f) {
-    return function(...args) {функция, 
+    return function(...args) {
         return !f(...args);
     }
 }
@@ -102,7 +102,7 @@ function drop(array, n = 1) {
 }
 _.drop = drop;
 
-function dropRight(array, n = 1) {
-    return array.slice(0, -n);
+function dropRight(array, n = 1) { //как это работает в стандартнсой библиотеке с отрицательным n?
+    return array.slice(0, (n == 0)? array.length:  -n);
 }
-_.dropRight = dropRight;
+_.dropRight = dropRight
