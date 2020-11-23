@@ -125,4 +125,12 @@ function flatten(array) {
     return result;
 }
 
-_.flatten = flatten;
+function flatten2(array) { //alternate version of flatten function
+    let result = [];
+    array.forEach((x)=>isArray(x)? result.push(...x): result.push(x));
+    return result;
+}
+
+
+_.flatten = flatten2;
+
