@@ -68,8 +68,8 @@ function differenceBy(array, ...diff) {
 _.differenceBy = differenceBy;
 
 // differenceWith - O(N*N)
-
-function makeComaparatorArrayToOne(array, comparatorOneToOne) {
+// makeComaparatorArrayToOne - создает функцию компаратор, которая иститинна, если истинно хотябы одно сравнение финкцией comparatorOneToOne
+function makeComaparatorArrayToOne(array, comparatorOneToOne) {  
     return function(one) {
         for (let i in array) {
             if (comparatorOneToOne(array[i], one)) return true;
@@ -78,8 +78,9 @@ function makeComaparatorArrayToOne(array, comparatorOneToOne) {
     }
 }
 
+// makeNotFunction - на входе функция с возвращаемым значением логического типа, на выходе новая - логическая инверсия входной функции
 function makeNotFunction(f) {
-    return function(...args) {
+    return function(...args) {функция, 
         return !f(...args);
     }
 }
