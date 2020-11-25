@@ -1,10 +1,12 @@
 let lodash_array = {
     chunk,
     compact,
-    concat,
+//    concat,
     difference,
-    differenceBy,
-    differenceWith,
+//    differenceBy,
+//    differenceWith,
+    findIndex,        //Need to realise createCllback
+//    first,
     drop,
     dropRight,
     head,
@@ -98,6 +100,12 @@ function differenceWith(array, ...diff) {
     diff = diff.filter(isArray); 
     diff = concat([], ...diff);
     return array.filter(makeNotFunction(makeComaparatorArrayToOne(diff, comparator)));
+}
+
+function findIndex(array, callback) {
+    for (let i in array) 
+        if (callback(array[i])) return i;
+    return -1;
 }
 
 function drop(array, n = 1) {
