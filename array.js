@@ -1,12 +1,14 @@
 let lodash_array = {
-// implementation based on lodash version 1.3.1 
+    chunk,
     compact,
+    concat,
     difference,
+    differenceBy, // not worked yet
     drop,
     findIndex,
-/*    first,
+    first,
     flatten,
-    head,
+/*     head,
     indexOf,
     initial,
     intersection,
@@ -31,44 +33,18 @@ Object.assign(__, lodash_array);
 
 //---- version 1.3.1
 
+function chunk(array, n) {
+    n = _toInt(n, 0);
+    if (n == 0) return [];
+    let rv = [];
+    for(let i = 0; i < array.length; i += n) {
+        rv.push(array.slice(i, i + n));
+    }
+    return rv;
+} 
+
 function compact(array) {
     return array.filter((x)=>!!x);
-}
-
-function difference(array, ...diff) {
-    diff = diff.filter(isArray); 
-    let diffset = new Set(concat([], ...diff));
-    return array.filter((x)=>!diffset.has(x));
-}
-
-function drop(array, n) {
-    if (drop.arguments.length == 1) n = 1;
-    return array.slice(_toInt(n, 0));
-}
-
-
-function findIndex(array, callback) {
-//    if (thisArg instanceof Object) callback = callback.bind(thisArg);
-    for (let i in array) 
-        if (callback(array[i])) return +i;
-    return -1;
-}
-
-function first(array) {
-    return array[0];
-}
-
-//---- se utils
-
-function _toInt(n, minBound, maxBound) {
-    n = parseInt(n);
-    if (minBound !== undefined) n = (n > minBound)? n: minBound;
-    if (maxBound !== undefined) n = (n < maxBound)? n: maxBound;
-    return n;
-}
-
-function isArray(a) {
-    return a instanceof Array;  //stub, todo: move to utils
 }
 
 function concat(...v) {
@@ -77,6 +53,86 @@ function concat(...v) {
     return result;
 }
 
+function difference(array, ...diff) {
+    diff = diff.filter(isArray); 
+    let diffset = new Set(concat([], ...diff));
+    return array.filter((x)=>!diffset.has(x));
+}
+
+function differenceBy(array, ...diff) {
+    let callback = (x) => x;
+    if (typeof last(diff) == "function") {
+        callback = diff.pop;
+    }
+    diff = concat(diff.filter(isArray)); 
+    diff = diff.map(callback);
+    let diffset = new Set(diff);
+    return array.filter((x)=>!diffset.has(callback(x)));
+}
+
+function drop(array, n) {
+    if (drop.arguments.length == 1) n = 1;
+    return array.slice(_toInt(n, 0));
+}
+
+function findIndex(array, callback, thisArg) { //todo: thisArg does not work
+    callback = createCallback(callback, thisArg);
+    for (let i in array) 
+        if (callback(array[i])) return +i;
+    return -1;
+}
+
+function first(array, callback, thisArg) {  //todo: thisArg does not work
+    if (first.arguments.length == 1) return array[0];
+    if (typeof callback == "number") {
+        let n = _toInt(callback);
+        if (n <= 1) return array[0];
+        return array.slice(0, n);
+    }
+    callback = createCallback(callback, thisArg);
+    for (let i in array) {
+        if (callback(array[i])) continue;
+        return array.slice(0, i);
+    }
+    return array[0];
+}
+
+function flatten(array) { 
+    let result = [];
+    array.forEach((x)=>isArray(x)? result.push(...x): result.push(x));
+    return result;
+}
+
+//---- se utils
+
+function createCallback(c, thisArg) { //todo: thisArg does not wor
+    if (typeof c == "string") {
+        return function(x) {
+            return x[c];
+        }
+    }
+    if (typeof c == "object") {
+        return function(x) {
+            for (let k in c) {
+                if (c[k] != x[k]) return false;
+            }
+            return true;
+        }
+    }
+    return c;
+}
+
+
+function _toInt(n, minBound = Number.MIN_SAFE_INTEGER, maxBound = Number.MAX_SAFE_INTEGER) {
+    n = parseInt(n);
+    n = (n > minBound)? n: minBound;
+    n = (n < maxBound)? n: maxBound;
+    return n;
+}
+
+function isArray(a) {
+    return a instanceof Array;  //stub, todo: move to utils
+}
 
 function dropRight(array, n = 1) { 
     return array.slice(0, (n == 0)? array.length:  -n);
@@ -90,8 +146,3 @@ function last(array) {
     return array[array.length - 1];
 }
 
-function flatten(array) { 
-    let result = [];
-    array.forEach((x)=>isArray(x)? result.push(...x): result.push(x));
-    return result;
-}
