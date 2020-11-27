@@ -7,6 +7,7 @@ let lodash_array = {
     differenceWith,
     drop, 
     dropRight,
+    dropRightWhile,
 //    findIndex,
     first,
     flatten,
@@ -102,6 +103,15 @@ function dropRight(array, n) {
     return array.slice(0, array.length - _toInt(n, 0, array.length));
 }
 
+function dropRightWhile(array, predicate) {
+    if (predicate == undefined) predicate = (val, index, arr) => !!val;
+    let n_to_drop = 0;
+    for (let i = array.length - 1; i >= 0 ; i--) {
+        if  (!predicate(array[i], i, array)) break;
+        n_to_drop ++;    
+    }
+    return dropRight(array, n_to_drop);
+}
 
 function findIndex(array, callback, thisArg) { //todo: thisArg does not work
     callback = createCallback(callback, thisArg);
