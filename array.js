@@ -13,6 +13,7 @@ let lodash_cover_array = {
     findIndex,
     findLastIndex,
     flatten,
+    flattenDeep,
 /*     
     head,
     indexOf,
@@ -160,6 +161,16 @@ function flatten(array) {
     array.forEach((x)=>isArray(x)? result.push(...x): result.push(x));
     return result;
 }
+
+function flattenDeep(array) {
+    let rv = [];
+    for (let i = 0; i < array.length; i++) {
+        if (isArray(array[i])) {
+            rv.push(...flattenDeep(array[i]));
+        } else rv.push(array[i]);
+    }
+    return rv;
+} 
 
 //---- some utils
 
