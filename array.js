@@ -8,6 +8,7 @@ let lodash_array = {
     drop, 
     dropRight,
     dropRightWhile,
+    dropWhile,
 //    findIndex,
     first,
     flatten,
@@ -113,6 +114,17 @@ function dropRightWhile(array, predicate) {
     return dropRight(array, n_to_drop);
 }
 
+function dropWhile(array, predicate) {
+    if (predicate == undefined) predicate = (val, index, arr) => !!val;
+    let n_to_drop = 0;
+//    for (let i in array) { -- it does not work with undefined(empty) values in array
+    for (let i = 0; i < array.length; i++) {
+        if  (!predicate(array[i], i, array)) break;
+        n_to_drop ++;    
+    }
+    return drop(array, n_to_drop);
+}
+
 function findIndex(array, callback, thisArg) { //todo: thisArg does not work
     callback = createCallback(callback, thisArg);
     for (let i in array) 
@@ -141,7 +153,7 @@ function flatten(array) {
     return result;
 }
 
-//---- se utils
+//---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
     if (typeof c == "string") {
