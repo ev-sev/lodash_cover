@@ -5,8 +5,9 @@ let lodash_array = {
     difference,
     differenceBy,
     differenceWith,
-//    drop, 
-    findIndex,
+    drop, 
+    dropRight,
+//    findIndex,
     first,
     flatten,
 /*     head,
@@ -96,6 +97,12 @@ function drop(array, n) {
     return array.slice(_toInt(n, 0));
 }
 
+function dropRight(array, n) { 
+    if (dropRight.arguments.length == 1) n = 1;
+    return array.slice(0, array.length - _toInt(n, 0, array.length));
+}
+
+
 function findIndex(array, callback, thisArg) { //todo: thisArg does not work
     callback = createCallback(callback, thisArg);
     for (let i in array) 
@@ -157,10 +164,6 @@ function isArray(a) {
 
 function isFunction(f) {
     return f instanceof Function;
-}
-
-function dropRight(array, n = 1) { 
-    return array.slice(0, (n == 0)? array.length:  -n);
 }
 
 function head(array) {
