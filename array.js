@@ -4,8 +4,8 @@ let lodash_array = {
     concat,
     difference,
     differenceBy,
-//    differenceWith,
-    drop, //
+    differenceWith,
+//    drop, 
     findIndex,
     first,
     flatten,
@@ -73,6 +73,24 @@ function differenceBy(array, ...diff) {
     return array.filter((x)=>!diffset.has(callback(x)));
 }
 
+function differenceWith(array, ...diff) {
+    if (isArray(last(diff))) return difference(array, ...diff);
+    let comparator = diff.pop();
+    if (!isFunction(comparator)) return difference(array, ...diff);
+
+    diff = concat(...diff.filter(isArray));
+
+    function atLeastOne(x, arr, cmp) {
+        for (let i in arr) {
+            if (cmp(x, arr[i])) return true;
+        }
+        return false;
+    }
+
+    return array.filter((x) => !atLeastOne(x, diff, comparator));
+
+}
+
 function drop(array, n) {
     if (drop.arguments.length == 1) n = 1;
     return array.slice(_toInt(n, 0));
@@ -135,6 +153,10 @@ function _toInt(n, minBound = Number.MIN_SAFE_INTEGER, maxBound = Number.MAX_SAF
 
 function isArray(a) {
     return a instanceof Array;  //stub, todo: move to utils
+}
+
+function isFunction(f) {
+    return f instanceof Function;
 }
 
 function dropRight(array, n = 1) { 
