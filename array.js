@@ -161,17 +161,11 @@ function flatten(array) {
 }
 
 function flattenDeep(array) {
-    let rv = [];
-    for (let i = 0; i < array.length; i++) {
-        if (isArray(array[i])) {
-            rv.push(...flattenDeep(array[i]));
-        } else rv.push(array[i]);
-    }
-    return rv;
+    return flattenDepth(array, Infinity);
 } 
 
 function flattenDepth(array, n = 1) {
-    n = _toInt(n, 0)
+    n = _toInt(n, 0);
     if (n == 0) return array;
 
     let rv = [];
@@ -212,6 +206,10 @@ function createCallback(c, thisArg) { //todo: thisArg does not wor
 
 
 function _toInt(n, minBound = Number.MIN_SAFE_INTEGER, maxBound = Number.MAX_SAFE_INTEGER) {
+    if (n === NaN) return n;
+    if (n === Infinity) return Infinity;
+    if (n === -Infinity) return -Infinity;
+    
     n = parseInt(n);
     n = (n > minBound)? n: minBound;
     n = (n < maxBound)? n: maxBound;
