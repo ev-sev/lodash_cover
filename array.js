@@ -1,4 +1,4 @@
-let lodash_array = {
+let lodash_cover_array = {
     chunk,
     compact,
     concat,
@@ -9,6 +9,7 @@ let lodash_array = {
     dropRight,
     dropRightWhile,
     dropWhile,
+    fill,
 //    findIndex,
     first,
     flatten,
@@ -33,7 +34,7 @@ let lodash_array = {
     zipObject,*/
 }
 
-Object.assign(__, lodash_array);
+Object.assign(__, lodash_cover_array);
 
 //---- version 1.3.1
 
@@ -123,6 +124,13 @@ function dropWhile(array, predicate) {
         n_to_drop ++;    
     }
     return drop(array, n_to_drop);
+}
+
+function fill(array, value, start = 0, stop = array.length) {
+    start = _toInt(start, 0, array.length);
+    stop = _toInt(stop, 0, array.length);
+    for (let i = start; i < stop; i++) array[i] = value;
+    return array;
 }
 
 function findIndex(array, callback, thisArg) { //todo: thisArg does not work
