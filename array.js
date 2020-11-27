@@ -12,8 +12,8 @@ let lodash_cover_array = {
     fill,
     findIndex,
     findLastIndex,
-/*    first,
     flatten,
+/*     
     head,
     indexOf,
     initial,
@@ -153,22 +153,6 @@ function findLastIndex(array, callback, fromIndex = array.length - 1) {
     for (let i = fromIndex; i >= 0; i--) 
         if (callback(array[i])) return i;
     return -1;
-}
-
-
-function first(array, callback, thisArg) {  //todo: thisArg does not work
-    if (first.arguments.length == 1) return array[0];
-    if (typeof callback == "number") {
-        let n = _toInt(callback);
-        if (n <= 1) return array[0];
-        return array.slice(0, n);
-    }
-    callback = createCallback(callback, thisArg);
-    for (let i in array) {
-        if (callback(array[i])) continue;
-        return array.slice(0, i);
-    }
-    return array[0];
 }
 
 function flatten(array) { 
