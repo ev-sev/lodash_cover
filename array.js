@@ -157,9 +157,7 @@ function findLastIndex(array, callback, fromIndex = array.length - 1) {
 }
 
 function flatten(array) { 
-    let result = [];
-    array.forEach((x)=>isArray(x)? result.push(...x): result.push(x));
-    return result;
+    return flattenDepth(array);
 }
 
 function flattenDeep(array) {
@@ -171,6 +169,21 @@ function flattenDeep(array) {
     }
     return rv;
 } 
+
+function flattenDepth(array, n = 1) {
+    n = _toInt(n, 0)
+    if (n == 0) return array;
+
+    let rv = [];
+    
+    for (let i = 0; i < array.length; i++) {
+        if (isArray(array[i])) {
+            rv.push(...flattenDepth(array[i], n - 1));
+        } else rv.push(array[i]);
+    }
+    return rv;
+} 
+
 
 //---- some utils
 
