@@ -10,7 +10,7 @@ let lodash_cover_array = {
     dropRightWhile,
     dropWhile,
     fill,
-//    findIndex,
+    findIndex,
     first,
     flatten,
 /*     head,
@@ -36,7 +36,6 @@ let lodash_cover_array = {
 
 Object.assign(__, lodash_cover_array);
 
-//---- version 1.3.1
 
 function chunk(array, n) {
     n = _toInt(n, 0);
@@ -133,10 +132,14 @@ function fill(array, value, start = 0, stop = array.length) {
     return array;
 }
 
-function findIndex(array, callback, thisArg) { //todo: thisArg does not work
-    callback = createCallback(callback, thisArg);
-    for (let i in array) 
-        if (callback(array[i])) return +i;
+function findIndex(array, callback, fromIndex = 0) {
+    if (callback == undefined) {
+        callback = (x) => !!x;
+    }
+    fromIndex = _toInt(fromIndex, 0, array.length);
+    callback = createCallback(callback);
+    for (let i = fromIndex; i < array.length; i++) 
+        if (callback(array[i])) return i;
     return -1;
 }
 
@@ -170,11 +173,17 @@ function createCallback(c, thisArg) { //todo: thisArg does not wor
         }
     }
     if (typeof c == "object") {
-        return function(x) {
-            for (let k in c) {
-                if (c[k] != x[k]) return false;
+        if (!isArray(c)) {
+            return function(x) {
+                for (let k in c) {
+                    if (c[k] != x[k]) return false;
+                }
+                return true;
             }
-            return true;
+        } else {
+            return function(x) {
+                return x[c[0]] == c[1];
+            }
         }
     }
     return c;
