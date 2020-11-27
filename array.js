@@ -178,7 +178,13 @@ function flattenDepth(array, n = 1) {
     return rv;
 } 
 
-
+function fromPairs(array) {
+    let obj = {};
+    for (let i of array) {
+        obj[i[0]] = i[1];
+    }
+    return obj;
+}
 //---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
@@ -209,7 +215,7 @@ function _toInt(n, minBound = Number.MIN_SAFE_INTEGER, maxBound = Number.MAX_SAF
     if (n === NaN) return n;
     if (n === Infinity) return Infinity;
     if (n === -Infinity) return -Infinity;
-    
+
     n = parseInt(n);
     n = (n > minBound)? n: minBound;
     n = (n < maxBound)? n: maxBound;
@@ -217,7 +223,7 @@ function _toInt(n, minBound = Number.MIN_SAFE_INTEGER, maxBound = Number.MAX_SAF
 }
 
 function isArray(a) {
-    return a instanceof Array;  //stub, todo: move to utils
+    return a instanceof Array;  //stub
 }
 
 function isFunction(f) {
