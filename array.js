@@ -3,8 +3,9 @@ let lodash_array = {
     compact,
     concat,
     difference,
-    differenceBy, // not worked yet
-    drop,
+    differenceBy,
+//    differenceWith,
+    drop, //
     findIndex,
     first,
     flatten,
@@ -60,12 +61,14 @@ function difference(array, ...diff) {
 }
 
 function differenceBy(array, ...diff) {
-    let callback = (x) => x;
-    if (typeof last(diff) == "function") {
-        callback = diff.pop;
+    let callback;
+    if (!isArray(last(diff))) {
+        callback = createCallback(diff.pop());
     }
-    diff = concat(diff.filter(isArray)); 
-    diff = diff.map(callback);
+    diff = concat(...diff.filter(isArray));
+
+    if (callback) diff = diff.map(callback);
+    else callback = (x) => x;
     let diffset = new Set(diff);
     return array.filter((x)=>!diffset.has(callback(x)));
 }
