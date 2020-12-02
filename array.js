@@ -19,6 +19,7 @@ let lodash_cover_array = {
     indexOf,
     initial,
     intersection,
+    intersectionBy,
 /*    last,
     lastIndexOf,
     object,
@@ -204,6 +205,30 @@ function intersection(...arrays) {
     arrayOfSets = arrays.map(x => new Set(x)); 
     let uniqueCandidates = new Array(... arrayOfSets.shift());
     return uniqueCandidates.filter((x)=>all(arrayOfSets, (y)=>y.has(x)));
+}
+
+function intersectionBy(...arrays) {
+    let callback;
+    if (!isArray(last(arrays))) {
+        callback = createCallback(arrays.pop());
+    } else
+        callback = (x) => x;
+
+    if (!isArray(arrays[0])) return [];
+    let firstArray = arrays.shift();
+    let setFA = new Set;
+    let arrayOfSets = arrays.map(x => new Set(x.map(callback))); 
+
+    let rv = [];
+    for (let i in firstArray) {
+        let v = callback(firstArray[i]);
+        if (setFA.has(v)) continue;
+        if (all(arrayOfSets, (y)=>y.has(v))) {
+            rv.push(firstArray[i]);
+        }
+        setFA.add(v);
+    }
+    return rv;
 }
 
 //---- some utils
