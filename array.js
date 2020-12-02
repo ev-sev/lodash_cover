@@ -14,10 +14,10 @@ let lodash_cover_array = {
     findLastIndex,
     flatten,
     flattenDeep,
-/*     
+    fromPairs,
     head,
     indexOf,
-    initial,
+/*    initial,
     intersection,
     last,
     lastIndexOf,
@@ -185,6 +185,15 @@ function fromPairs(array) {
     }
     return obj;
 }
+
+function head(array) {
+    return array[0];
+}
+
+function indexOf(array, value, fromIndex = 0) {
+    return findIndex(array, (x)=>x===value, fromIndex);
+}
+
 //---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
@@ -228,10 +237,6 @@ function isArray(a) {
 
 function isFunction(f) {
     return f instanceof Function;
-}
-
-function head(array) {
-    return array[0];
 }
 
 function last(array) {
