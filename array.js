@@ -17,9 +17,9 @@ let lodash_cover_array = {
     fromPairs,
     head,
     indexOf,
-/*    initial,
+    initial,
     intersection,
-    last,
+/*    last,
     lastIndexOf,
     object,
     range,
@@ -194,6 +194,18 @@ function indexOf(array, value, fromIndex = 0) {
     return findIndex(array, (x)=>x===value, fromIndex);
 }
 
+function initial(array) {
+    if (isArray(array)) return array.slice(0, array.length - 1);
+    return [];
+}
+
+function intersection(...arrays) {
+    if (!isArray(arrays[0])) return [];
+    arrayOfSets = arrays.map(x => new Set(x)); 
+    let uniqueCandidates = new Array(... arrayOfSets.shift());
+    return uniqueCandidates.filter((x)=>all(arrayOfSets, (y)=>y.has(x)));
+}
+
 //---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
@@ -243,3 +255,27 @@ function last(array) {
     return array[array.length - 1];
 }
 
+//---- logic utils
+
+function all(arr, predicate) { // if all elements of arr match predicate
+    for (let i = 0; i < arr.length; i++) {
+        if (!predicate(arr[i])) return  false;
+    }
+    return  true;
+}
+
+function notPredicate(predicate) {
+    return function(...args) {
+        return !predicate(...args);
+    }
+}
+
+function atLeastOne(arr, predicate) { // return true if at least one match the predicate
+    return !all(arr, notPredicate(predicate));
+} 
+
+function noOne(arr, predicate) {
+    return !atLeastOne(arr, predicate);
+}
+
+//--- logic utils end
