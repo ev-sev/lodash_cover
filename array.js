@@ -28,6 +28,8 @@ let lodash_cover_array = {
     pull,
     pullAll,
     pullAllBy,
+    pullAt,
+    remove,
 /*    object,
     range,
     rest,
@@ -308,6 +310,14 @@ function pullAt(array, ...indexes) {
     indexes.sort((a, b) => b - a);
     indexes.forEach((x)=>array.splice(x, 1));
     return  pulled;
+}
+
+function remove(array, predicate = identity) {
+    let rv = array.filter(predicate);
+    for (let i = array.length - 1; i >= 0; i--) {
+        if (predicate(array[i])) array.splice(i, 1);
+    }
+    return rv;
 }
  
 ///---- some utils
