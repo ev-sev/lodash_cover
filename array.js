@@ -298,7 +298,17 @@ function pullAllBy(array, values, iteratee = identity) {
     return array;
 }
 
+function pullAllWith(array, values, comparator = (x, y) => x == y) {
+    return pullAll(array, intersectionWith(array, values, comparator));
+}
 
+function pullAt(array, ...indexes) {
+    indexes = flattenDeep(indexes).map(x=>_toInt(x));
+    let pulled = indexes.map(i=>array[i]);
+    indexes.sort((a, b) => b - a);
+    indexes.forEach((x)=>array.splice(x, 1));
+    return  pulled;
+}
  
 ///---- some utils
 
