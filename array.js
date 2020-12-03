@@ -30,6 +30,7 @@ let lodash_cover_array = {
     pullAllBy,
     pullAt,
     remove,
+    reverse,
 /*    object,
     range,
     rest,
@@ -319,7 +320,16 @@ function remove(array, predicate = identity) {
     }
     return rv;
 }
- 
+
+function reverse(array) {   // just for fun 
+    for (let i = 0, j = array.length - 1; i < j; i++, j--) {
+        let t = array[i];
+        array[i] = array[j];
+        array[j] = t;
+    }
+    return array;
+}
+
 ///---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
