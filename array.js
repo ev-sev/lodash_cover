@@ -24,6 +24,7 @@ let lodash_cover_array = {
     join,
     last,
     lastIndexOf,
+    nth,
 /*    object,
     range,
     rest,
@@ -263,6 +264,14 @@ function last(array) {
 
 function lastIndexOf(array, value, fromIndex=array.length-1) {
     return findLastIndex(array, (x)=>x==value, fromIndex);
+}
+
+function nth(array, n = 0) {
+    n = _toInt(n);
+    if (n >= array.length) return undefined;
+    if (n < -array.length) return undefined;
+    if (n >= 0) return array[n];
+    return array[array.length + n];
 }
 
 //---- some utils
