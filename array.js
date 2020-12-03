@@ -21,6 +21,7 @@ let lodash_cover_array = {
     intersection,
     intersectionBy,
     intersectionWith,
+    join,
 /*    last,
     lastIndexOf,
     object,
@@ -250,6 +251,10 @@ function intersectionWith(...arrays) {
     if (!isFunction(last(arrays))) return difference(...arrays);
     let cmp = arrays.pop();
     return arrays.reduce((a,b)=>intersectionWith2(a, b, cmp));
+}
+
+function join(array, separator = ',') {
+    return array.join(separator);
 }
 
 //---- some utils
