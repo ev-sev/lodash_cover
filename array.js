@@ -20,6 +20,7 @@ let lodash_cover_array = {
     initial,
     intersection,
     intersectionBy,
+    intersectionWith,
 /*    last,
     lastIndexOf,
     object,
@@ -229,6 +230,26 @@ function intersectionBy(...arrays) {
         setFA.add(v);
     }
     return rv;
+}
+
+function intersectionWith(...arrays) {
+    function intersectionWith2(arr1, arr2, cmp) {
+//        if (arr1 == arr2) return arr1;
+        if (!(arr1 && arr2)) return [];
+        arr2 = arr2.filter((x)=>true); // remove empty elements
+        let rv = [];
+        for (let x of arr1) {
+            let arr2_ = arr2.filter((y)=>!cmp(x, y));
+            if (arr2.length != arr2_.length) {
+                arr2 = arr2_;
+                rv.push(x);
+            }
+        }
+        return rv;
+    }
+    if (!isFunction(last(arrays))) return difference(...arrays);
+    let cmp = arrays.pop();
+    return arrays.reduce((a,b)=>intersectionWith2(a, b, cmp));
 }
 
 //---- some utils
