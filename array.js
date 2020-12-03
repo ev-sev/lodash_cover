@@ -22,9 +22,9 @@ let lodash_cover_array = {
     intersectionBy,
     intersectionWith,
     join,
-/*    last,
+    last,
     lastIndexOf,
-    object,
+/*    object,
     range,
     rest,
     sortedIndex,
@@ -257,6 +257,14 @@ function join(array, separator = ',') {
     return array.join(separator);
 }
 
+function last(array) {
+    return array[array.length - 1];
+}
+
+function lastIndexOf(array, value, fromIndex=array.length-1) {
+    return findLastIndex(array, (x)=>x==value, fromIndex);
+}
+
 //---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
@@ -300,10 +308,6 @@ function isArray(a) {
 
 function isFunction(f) {
     return f instanceof Function;
-}
-
-function last(array) {
-    return array[array.length - 1];
 }
 
 //---- logic utils
