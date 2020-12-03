@@ -27,6 +27,7 @@ let lodash_cover_array = {
     nth,
     pull,
     pullAll,
+    pullAllBy,
 /*    object,
     range,
     rest,
@@ -288,6 +289,17 @@ function pullAll(array, values) {
     return array;
 }
 
+function pullAllBy(array, values, iteratee = identity) {
+    iteratee = createCallback(iteratee);
+    let valuesToRemove = new Set(values.map(iteratee));
+    for (let i = array.length - 1; i >= 0; i--) {
+        if (valuesToRemove.has(iteratee(array[i]))) array.splice(i, 1);
+    }
+    return array;
+}
+
+
+ 
 ///---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
@@ -313,6 +325,9 @@ function createCallback(c, thisArg) { //todo: thisArg does not wor
     return c;
 }
 
+function identity(x) {
+    return x;
+}
 
 function _toInt(n, minBound = Number.MIN_SAFE_INTEGER, maxBound = Number.MAX_SAFE_INTEGER) {
     if (n === NaN) return n;
