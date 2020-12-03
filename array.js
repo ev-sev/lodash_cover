@@ -25,6 +25,8 @@ let lodash_cover_array = {
     last,
     lastIndexOf,
     nth,
+    pull,
+    pullAll,
 /*    object,
     range,
     rest,
@@ -274,7 +276,19 @@ function nth(array, n = 0) {
     return array[array.length + n];
 }
 
-//---- some utils
+function pull(array, ...values) {
+    return pullAll(array, values);
+}
+
+function pullAll(array, values) {
+    let valuesToRemove = new Set(values);
+    for (let i = array.length - 1; i >= 0; i--) {
+        if (valuesToRemove.has(array[i])) array.splice(i, 1);
+    }
+    return array;
+}
+
+///---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
     if (typeof c == "string") {
