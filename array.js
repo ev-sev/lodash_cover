@@ -69,41 +69,41 @@ function concat(...v) {
     return result;
 }
 
-function difference(array, ...diff) {
-    diff = diff.filter(isArray); 
-    let diffset = new Set(concat([], ...diff));
-    return array.filter((x)=>!diffset.has(x));
+function difference(...arrays) {
+    function difference2(array1, array2) {
+        if (!isArray(array1)) return [];
+        if (!isArray(array2)) return array1;
+        let set2 = new Set(array2);
+        return array1.filter((x)=>!set2.has(x));
+    };
+    return arrays.reduce(difference2);
 }
 
 function differenceBy(array, ...diff) {
     let callback;
     if (!isArray(last(diff))) {
         callback = createCallback(diff.pop());
-    }
-    diff = concat(...diff.filter(isArray));
+    } else
+        return difference(array, ...diff);
 
-    if (callback) diff = diff.map(callback);
-    else callback = (x) => x;
-    let diffset = new Set(diff);
+    let diffset = new Set();
+    diff.forEach(x=>isArray(x)? x.forEach(y=>diffset.add(y)): x = x);
+
     return array.filter((x)=>!diffset.has(callback(x)));
 }
 
-function differenceWith(array, ...diff) {
-    if (isArray(last(diff))) return difference(array, ...diff);
-    let comparator = diff.pop();
-    if (!isFunction(comparator)) return difference(array, ...diff);
+function differenceWith(...arrays) {
+    if (isArray(last(arrays)) || !isFunction(last(arrays))) return difference(...arrays);
+    let comparator = arrays.pop();
 
-    diff = concat(...diff.filter(isArray));
+    function differenceWith2(array1, array2, cmp) {
+        if (!isArray(array1)) return [];
+        if (!isArray(array2)) return array1;
 
-    function atLeastOne(x, arr, cmp) {
-        for (let i in arr) {
-            if (cmp(x, arr[i])) return true;
-        }
-        return false;
+        return array1.filter((x) => array2.every((y) => !comparator(x, y)));        
     }
 
-    return array.filter((x) => !atLeastOne(x, diff, comparator));
-
+    return arrays.reduce((a, b) => differenceWith2(a, b, comparator));
 }
 
 function drop(array, n) {
@@ -211,9 +211,12 @@ function initial(array) {
 
 function intersection(...arrays) {
     if (!isArray(arrays[0])) return [];
-    arrayOfSets = arrays.map(x => new Set(x)); 
-    let uniqueCandidates = new Array(... arrayOfSets.shift());
-    return uniqueCandidates.filter((x)=>all(arrayOfSets, (y)=>y.has(x)));
+    function intersection2(a1, a2) {
+        if (!isArray(a2)) return [];
+        let set2 = new Set(a2);
+        return a1.filter((x)=>set2.has(x));
+    }
+    return arrays.reduce(intersection2);
 }
 
 function intersectionBy(...arrays) {
