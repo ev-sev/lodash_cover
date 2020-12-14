@@ -42,6 +42,7 @@ let lodash_cover_array = {
     sortedUniqBy,
     tail,
     take,
+    takeRight,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -463,9 +464,17 @@ function tail(array) {
 }
 
 function take(array, n = 1) {
-    n = indexCast(array, n);
+    n = (n < 0)? 0: n > array.length? array.length: n;
     let rv = [];
     for (let i = 0; i < n; i++) 
+        rv.push(array[i]);
+    return rv;
+}
+
+function takeRight(array, n = 1) {
+    n = (n < 0)? 0: n > array.length? array.length: n;
+    let rv = [];
+    for (let i = array.length - n; i < array.length; i++) 
         rv.push(array[i]);
     return rv;
 }
