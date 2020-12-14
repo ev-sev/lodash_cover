@@ -32,7 +32,9 @@ let lodash_cover_array = {
     remove,
     reverse,
     slice,
-
+    sortedIndex,
+    sortedIndexBy,
+    sortedIndexOf,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -347,7 +349,31 @@ function sortedIndex(array, value) {
     return _sortedIndex();
 }
 
+function sortedIndexBy(array, value, iteratee=identity) {
+    if (!isArray(array)) return 0;
+    if (iteratee === undefined) 
+        return sortedIndex(array, value);
+    iteratee = createCallback(iteratee);
+    value = iteratee(value);
+    function _sortedIndex(start = 0, end = array.length) {
+        if (start == end) return start;
+        if (end - start == 1) {
+            if (value <= iteratee(array[start])) return start;
+            return end;
+        }
+        let m = Math.floor((start + end) / 2);
 
+        if (value > iteratee(array[m])) return _sortedIndex(m, end);
+        return _sortedIndex(start, m);
+    }
+    return _sortedIndex();
+}
+
+function sortedIndexOf(array, value) {
+    let si = sortedIndex(array, value);
+    if (array[si] === value) return si;
+    return -1;
+}
 
 ///---- some utils
 
