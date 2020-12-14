@@ -38,6 +38,8 @@ let lodash_cover_array = {
     sortedLastIndex,
     sortedLastIndexBy,
     sortedLastIndexOf,
+    sortedUniq,
+    sortedUniqBy,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -420,6 +422,36 @@ function sortedLastIndexOf(array, value) {
     return -1;
 }
 
+function sortedUniq(array) {
+    if (!isArray(array)) return [];
+    if (array.length == 0) return [];
+    let v = array[0];
+    let rv = [];
+    rv.push(v);
+    for (let i = 1; i < array.length; i++) {
+        if (v == array[i]) continue;
+        v = array[i];
+        rv.push(v);
+    }
+    return rv;
+}
+
+function sortedUniqBy(array, iteratee=identity) {
+    if (!isArray(array)) return [];
+    if (array.length == 0) return [];
+    iteratee = createCallback(iteratee);
+
+    let rv = [];
+    rv.push(array[0]);
+    let v = iteratee(array[0]);
+    for (let i = 1; i < array.length; i++) {
+        let vi = iteratee(array[i]);
+        if (v == vi) continue;
+        rv.push(array[i]);
+        v = vi;
+    }
+    return rv;
+}
 
 
 
