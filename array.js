@@ -35,6 +35,9 @@ let lodash_cover_array = {
     sortedIndex,
     sortedIndexBy,
     sortedIndexOf,
+    sortedLastIndex,
+    sortedLastIndexBy,
+    sortedLastIndexOf,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -374,6 +377,51 @@ function sortedIndexOf(array, value) {
     if (array[si] === value) return si;
     return -1;
 }
+
+function sortedLastIndex(array, value) {
+    if (!isArray(array)) return 0;
+    function _sortedLastIndex(start = 0, end = array.length) {
+        if (start == end) return start;
+        if (end - start == 1) {
+            if (value < array[start]) return start;
+            return end;
+        }
+        let m = Math.floor((start + end) / 2);
+
+        if (value >= array[m]) return _sortedLastIndex(m, end);
+        return _sortedLastIndex(start, m);
+    }
+    return _sortedLastIndex();
+}
+
+function sortedLastIndexBy(array, value, iteratee=identity) {
+    if (!isArray(array)) return 0;
+    if (iteratee === undefined) 
+        return sortedIndex(array, value);
+    iteratee = createCallback(iteratee);
+    value = iteratee(value);
+    function _sortedLastIndex(start = 0, end = array.length) {
+        if (start == end) return start;
+        if (end - start == 1) {
+            if (value < iteratee(array[start])) return start;
+            return end;
+        }
+        let m = Math.floor((start + end) / 2);
+
+        if (value >= iteratee(array[m])) return _sortedLastIndex(m, end);
+        return _sortedLastIndex(start, m);
+    }
+    return _sortedLastIndex();
+}
+
+function sortedLastIndexOf(array, value) {
+    let si = sortedLastIndex(array, value);
+    if (array[si - 1] === value) return si - 1;
+    return -1;
+}
+
+
+
 
 ///---- some utils
 
