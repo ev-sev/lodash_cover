@@ -45,6 +45,10 @@ let lodash_cover_array = {
     takeRight,
     takeRightWhile,
     takeWhile,
+//    union,
+//    unionBy,
+//    unionWith,
+    uniq,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -497,7 +501,21 @@ function takeWhile(array, predicate = identity) {
     return take(array, n);
 }
 
+function union() { }
+function unionBy() { }
+function unionWith() { }
 
+function uniq(array) {
+    let s = new Set();
+    let rv = [];
+    for (let v of array) {
+        if (!s.has(v)) {
+            rv.push(v);
+            s.add(v);
+        }
+    }
+    return rv;
+}
 
 
 ///---- some utils
@@ -553,6 +571,11 @@ function indexCast(array, idx) {
     if (idx >= len) return len - 1;
     if (idx < 0) return Math.max(len + idx, 0);
     return idx;
+}
+
+function makeUniqPredicate(array) {
+    let s = new Set(array);
+    return (x) => s.has(x); 
 }
 
 //---- logic utils
