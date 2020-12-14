@@ -323,12 +323,28 @@ function reverse(array) {   // just for fun
 
 function slice(array, start = 0, end = array.length) {
     start = indexCast(array, start);
-    end = indexCast(array.length, --end);
+    end = indexCast(array.length, end - 1);
     let rv = [];
     for (let i = start; i <= end; i++) {
         rv.push(array[i]);
     }
     return rv;
+}
+
+function sortedIndex(array, value) {
+    if (!isArray(array)) return 0;
+    function _sortedIndex(start = 0, end = array.length) {
+        if (start == end) return start;
+        if (end - start == 1) {
+            if (value <= array[start]) return start;
+            return end;
+        }
+        let m = Math.floor((start + end) / 2);
+
+        if (value > array[m]) return _sortedIndex(m, end);
+        return _sortedIndex(start, m);
+    }
+    return _sortedIndex();
 }
 
 
