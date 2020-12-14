@@ -43,6 +43,8 @@ let lodash_cover_array = {
     tail,
     take,
     takeRight,
+    takeRightWhile,
+    takeWhile,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -478,6 +480,25 @@ function takeRight(array, n = 1) {
         rv.push(array[i]);
     return rv;
 }
+
+function takeRightWhile(array, predicate = identity) {
+    predicate = createCallback(predicate);
+    let rv = [];
+    let n = 0;
+    for (let i = array.length - 1; i >= 0 && predicate(array[i]); i--) n++;
+    return takeRight(array, n);
+}
+
+function takeWhile(array, predicate = identity) {
+    predicate = createCallback(predicate);
+    let rv = [];
+    let n = 0;
+    for (let i = 0; i < array.length && predicate(array[i]); i++) n++;
+    return take(array, n);
+}
+
+
+
 
 ///---- some utils
 
