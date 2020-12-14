@@ -31,19 +31,8 @@ let lodash_cover_array = {
     pullAt,
     remove,
     reverse,
-/*    object,
-    range,
-    rest,
-    sortedIndex,
-    tail,
-    take,
-    union,
-    uniq,
-    unique,
-    unzip,
-    without,
-    zip,
-    zipObject,*/
+    slice,
+
 }
 
 Object.assign(__, lodash_cover_array);
@@ -129,7 +118,6 @@ function dropRightWhile(array, predicate) {
 function dropWhile(array, predicate) {
     if (predicate == undefined) predicate = (val, index, arr) => !!val;
     let n_to_drop = 0;
-//    for (let i in array) { -- it does not work with undefined(empty) values in array
     for (let i = 0; i < array.length; i++) {
         if  (!predicate(array[i], i, array)) break;
         n_to_drop ++;    
@@ -333,6 +321,18 @@ function reverse(array) {   // just for fun
     return array;
 }
 
+function slice(array, start = 0, end = array.length) {
+    start = indexCast(array, start);
+    end = indexCast(array.length, --end);
+    let rv = [];
+    for (let i = start; i <= end; i++) {
+        rv.push(array[i]);
+    }
+    return rv;
+}
+
+
+
 ///---- some utils
 
 function createCallback(c, thisArg) { //todo: thisArg does not wor
@@ -379,6 +379,13 @@ function isArray(a) {
 
 function isFunction(f) {
     return f instanceof Function;
+}
+
+function indexCast(array, idx) {
+    let len = array.length;
+    if (idx >= len) return len - 1;
+    if (idx < 0) return Math.max(len + idx, 0);
+    return idx;
 }
 
 //---- logic utils
