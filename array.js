@@ -41,6 +41,7 @@ let lodash_cover_array = {
     sortedUniq,
     sortedUniqBy,
     tail,
+    take,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -458,6 +459,14 @@ function tail(array) {
     if(!isArray(array)) return [];
     let rv = [];
     for (let i = 1; i < array.length; i++) rv.push(array[i]);
+    return rv;
+}
+
+function take(array, n = 1) {
+    n = indexCast(array, n);
+    let rv = [];
+    for (let i = 0; i < n; i++) 
+        rv.push(array[i]);
     return rv;
 }
 
