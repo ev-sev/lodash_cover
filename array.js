@@ -45,15 +45,16 @@ let lodash_cover_array = {
     takeRight,
     takeRightWhile,
     takeWhile,
-//    union,
-//    unionBy,
-//    unionWith,
+    union,
+    unionBy,
+    unionWith,
     uniq,
     uniqBy,
+    uniqWith,
+
 }
 
 Object.assign(__, lodash_cover_array);
-
 
 function chunk(array, n) {
     n = _toInt(n, 0);
@@ -502,9 +503,23 @@ function takeWhile(array, predicate = identity) {
     return take(array, n);
 }
 
-function union() { }
-function unionBy() { }
-function unionWith() { }
+function union(...arrays) { 
+    return uniq(concat(...arrays));
+}
+
+function unionBy(...arrays) { 
+    if (isArray(last(arrays))) 
+        return union(...arrays);
+    let f = arrays.pop();
+    return uniqBy(concat(...arrays), f);  
+}
+
+function unionWith(...arrays) { 
+    if (isArray(last(arrays))) 
+        return union(...arrays);
+    let f = arrays.pop();
+    return uniqWith(concat(...arrays), f);  
+}
 
 function uniq(array) {
     let s = new Set();
@@ -532,6 +547,24 @@ function uniqBy(array, iteratee = identity) {
     return rv;
 }
 
+function uniqWith(array, comparator = isEqual) {
+    function arrayFilter(a) {
+        if (a.length == 0) return undefined;
+        let v = a[0];
+        let rv = [];
+        for (let i = 1; i < a.length; i++) 
+            if (!comparator(v, a[i])) rv.push(a[i]);
+        return [v, rv];
+    }
+    let rv = []; 
+    for (; ; ) {
+        let b = arrayFilter(array);
+        if (!b) break;
+        rv.push(b[0]);
+        array = b[1];
+    }
+    return rv;
+}
 
 ///---- some utils
 
@@ -591,6 +624,10 @@ function indexCast(array, idx) {
 function makeUniqPredicate(array) {
     let s = new Set(array);
     return (x) => s.has(x); 
+}
+
+function isEqual(a, b) {  // stub
+    return a == b;
 }
 
 //---- logic utils
