@@ -49,6 +49,7 @@ let lodash_cover_array = {
 //    unionBy,
 //    unionWith,
     uniq,
+    uniqBy,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -512,6 +513,20 @@ function uniq(array) {
         if (!s.has(v)) {
             rv.push(v);
             s.add(v);
+        }
+    }
+    return rv;
+}
+
+function uniqBy(array, iteratee = identity) {
+    let s = new Set();
+    iteratee = createCallback(iteratee);
+    let rv = [];
+    for (let v of array) {
+        let vi = iteratee(v);
+        if (!s.has(vi)) {
+            rv.push(v);
+            s.add(vi);
         }
     }
     return rv;
