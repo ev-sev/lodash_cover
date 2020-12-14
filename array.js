@@ -40,6 +40,7 @@ let lodash_cover_array = {
     sortedLastIndexOf,
     sortedUniq,
     sortedUniqBy,
+    tail,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -453,7 +454,12 @@ function sortedUniqBy(array, iteratee=identity) {
     return rv;
 }
 
-
+function tail(array) {
+    if(!isArray(array)) return [];
+    let rv = [];
+    for (let i = 1; i < array.length; i++) rv.push(array[i]);
+    return rv;
+}
 
 ///---- some utils
 
