@@ -52,6 +52,7 @@ let lodash_cover_array = {
     uniqBy,
     uniqWith,
     without,
+    xor,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -571,17 +572,18 @@ function without(array, ...values) {
 }
 
 function xor(...arrays) {
-    let m = new Map(); 
-    for (let a of arrays) {
-        a = uniq(a);
-        for (let v of a) {
-            if (!m.has(v)) m.set(v, 1);
-            else m.set(v, m.get(v) + 1);
+    let sets = arrays.filter(isArray).map(x => new Set(x));
+    let rv = [];
+    for (let i = 0; i < sets.length; i++) {
+        b: for (let v of sets[i]) {
+            for (let j = 0; j < sets.length; j++) {
+                if (i == j) continue;
+                if (sets[j].has(v)) continue b;
+            }
+            rv.push(v);
         }
     }
-    for (let i in m.entries()) {
-
-    };
+    return rv;
 }
 
 ///---- some utils
