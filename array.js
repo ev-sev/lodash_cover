@@ -51,7 +51,7 @@ let lodash_cover_array = {
     uniq,
     uniqBy,
     uniqWith,
-
+    without,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -564,6 +564,24 @@ function uniqWith(array, comparator = isEqual) {
         array = b[1];
     }
     return rv;
+}
+
+function without(array, ...values) {
+    return difference(array, values);
+}
+
+function xor(...arrays) {
+    let m = new Map(); 
+    for (let a of arrays) {
+        a = uniq(a);
+        for (let v of a) {
+            if (!m.has(v)) m.set(v, 1);
+            else m.set(v, m.get(v) + 1);
+        }
+    }
+    for (let i in m.entries()) {
+
+    };
 }
 
 ///---- some utils
