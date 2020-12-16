@@ -55,6 +55,8 @@ let lodash_cover_array = {
     xor,
     xorBy,
     xorWith,
+    zip,
+    zipObject,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -648,6 +650,12 @@ function zip(...arrays) {
         }
         rv.push(a);
     }
+    return rv;
+}
+
+function zipObject(props=[], values=[]) {
+    let rv = {};
+    props.forEach((v, k) => rv[v] = values[k]);
     return rv;
 }
 
