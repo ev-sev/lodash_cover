@@ -54,6 +54,7 @@ let lodash_cover_array = {
     without,
     xor,
     xorBy,
+    xorWith,
 }
 
 Object.assign(__, lodash_cover_array);
@@ -524,7 +525,7 @@ function unionWith(...arrays) {
 }
 
 function uniq(array) {
-    let s = new Set();
+/*    let s = new Set();
     let rv = [];
     for (let v of array) {
         if (!s.has(v)) {
@@ -533,6 +534,8 @@ function uniq(array) {
         }
     }
     return rv;
+*/
+    return Array.from(new Set(array));
 }
 
 function uniqBy(array, iteratee = identity) {
@@ -547,6 +550,13 @@ function uniqBy(array, iteratee = identity) {
         }
     }
     return rv;
+
+/*    iteratee = createCallback(iteratee);
+    let m = new Map();
+    let t;
+    array.map(v => m.has(t = iteratee(v)) || m.set(t, v));
+    return Array.from(m.values());
+*/
 }
 
 function uniqWith(array, comparator = isEqual) {
@@ -624,6 +634,19 @@ function xorWith(...arrays) {
             }
             rv.push(v);
         }
+    }
+    return rv;
+}
+
+function zip(...arrays) {
+    let maxLength = Math.max(0, ...(arrays.map(a=>a.length))); 
+    let rv = [];
+    for (let i = 0; i < maxLength; i++) {
+        let a = [1];
+        for (let j = 0; j < arrays.length; j++) {
+            a[j] = arrays[j][i];
+        }
+        rv.push(a);
     }
     return rv;
 }
