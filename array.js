@@ -612,24 +612,19 @@ function xorBy(...arrays) {
 
 function xorWith(...arrays) {
     if (isArray(last(arrays))) return xor(arrays);
-    let iteratee = createCallback(arrays.pop());
-    let m = new Map();
-    for (let a of arrays) {
-        for (let v of a) {
-            let itv =iteratee(v);
-            if (!m.has(itv)) {
-                m.set(itv, [v, a, 1]);
-            } else {
-                let me = m.get(itv);
-                if (me[1] != a) {
-                    me[2] ++;
-                    m.set(itv, me);
-                }
+    let comparator = arrays.pop();
+    arrays = arrays.map(x=>uniqWith(x, comparator))
+    let rv = [];
+    for (let i = 0; i < arrays.length; i++) {
+        b: for (let v of arrays[i]) {
+            for (let j = 0; j < arrays.length; j++) {
+                if (i == j) continue;
+                for (let k of arrays[j])
+                    if (comparator(v, k)) continue b;
             }
+            rv.push(v);
         }
     }
-    let rv = [];
-    m.forEach((x)=> {if (x[2] == 1) rv.push(x[0])});
     return rv;
 }
 
