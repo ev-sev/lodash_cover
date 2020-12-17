@@ -659,7 +659,7 @@ function zipObject(props=[], values=[]) {
     return rv;
 }
 
-function zipObjectDeep(props=[], values=[]) {
+function zipObjectDeep_(props=[], values=[]) {
     function addProp(obj, prop, val) {
         let pointIdx = prop.indexOf('.');
         if (pointIdx == -1) {
@@ -669,6 +669,65 @@ function zipObjectDeep(props=[], values=[]) {
         let propName = prop.slice(0, pointIdx);
         if (typeof obj[propName] !== "object") obj[propName] = {};
         addProp(obj[propName], prop.slice(pointIdx + 1), val);
+    }
+    let obj = {};
+    props.forEach((v, k)=>addProp(obj, v, values[k]));
+    return obj;
+}
+
+function zipObjectDeep(props=[], values=[]) {
+    function parseProp(prop) {
+        let path = [];
+        let types = [];
+        let s = '';
+        let state = 0;
+        for (let c of prop) {
+            if (c == ' ') continue;
+            switch (state) {
+                case 0:
+                    if (c == '.') {
+                        if (s) path.push(s);
+                        s = '';
+                        types.push({});
+                        break;
+                    }
+                    if (c == '[') {
+                        if (s) path.push(s);
+                        s = '';
+                        types.push([]);
+                        state = 1;
+                        break;
+                    }
+                    s += c;
+                    break;
+                case 1:
+                    if (c == '"') continue;
+                    if (c == "'") continue;
+                    if (c == ']') {
+                        path.push(s);
+                        s = '';
+                        state = 0;
+                        break;
+                    }
+                    s += c;
+            }
+        }
+        if (s) {
+            path.push(s);
+            types.push({});
+        }
+        return zip(path, types);
+    }
+    function addProp(obj, prop, val) {
+        let path = parseProp(prop);
+        let pathEnd = path.pop();
+        for (let p of path) {
+            let pn = parseInt(p[0]);
+            if (!isNaN(pn)) p[0] = pn;
+            if (!obj[p[0]]) obj[p[0]] = p[1];
+            obj = obj[p[0]];
+        }
+        obj[pathEnd[0]] = val;
     }
     let obj = {};
     props.forEach((v, k)=>addProp(obj, v, values[k]));
