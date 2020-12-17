@@ -57,6 +57,8 @@ let lodash_cover_array = {
     xorWith,
     zip,
     zipObject,
+    zipObjectDeep,
+    zipWith
 }
 
 Object.assign(__, lodash_cover_array);
