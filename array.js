@@ -682,7 +682,6 @@ function zipObjectDeep(props=[], values=[]) {
         let s = '';
         let state = 0;
         for (let c of prop) {
-            if (c == ' ') continue;
             switch (state) {
                 case 0:
                     if (c == '.') {
@@ -701,8 +700,6 @@ function zipObjectDeep(props=[], values=[]) {
                     s += c;
                     break;
                 case 1:
-                    if (c == '"') continue;
-                    if (c == "'") continue;
                     if (c == ']') {
                         path.push(s);
                         s = '';
