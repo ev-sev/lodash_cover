@@ -660,47 +660,31 @@ function zipObject(props=[], values=[]) {
 }
 
 function zipObjectDeep(props=[], values=[]) {
-
     function addProp(obj, prop, val) {
-        if (prop == '') return;
-        if (prop[0] == '.') {
-            addProp(obj, prop.slice(1), val);
-            return;
-        }
         let pointIdx = prop.indexOf('.');
-        let brakeIdx = prop.indexOf('[');
-        if (pointIdx == brakeIdx) { // == -1
+        if (pointIdx == -1) {
             obj[prop] = val;
             return;
         }
-        if (pointIdx < brakeIdx) {
-            let key = prop.slice(0, pointIdx);
-            if (obj[key] === undefined) obj.key = {};
-            addProp(obj[key], prop.slice(pointIdx + 1), val);
-            return ;
-        }
-        if (pointIdx > brakeIdx) {
-            let key = prop.slice(0, brakeIdx);
-            if (obj[key] === undefined) obj[key] = [];
-            let rightBrakeIdx =  prop.indexOf(']');
-            let idx = _toint(prop.slice(brakeIdx + 1, rightBrakeIdx));
-            if (prop[rightBrakeIdx + 1] === undefined) {
-                obj[key][idx] = val;
-                return;
-            }
-        }
-
+        let propName = prop.slice(0, pointIdx);
+        if (typeof obj[propName] !== "object") obj[propName] = {};
+        addProp(obj[propName], prop.slice(pointIdx + 1), val);
     }
-    let rv = {};
-    props.forEach((v, k) => rv[v] = values[k]);
-    return rv;
+    let obj = {};
+    props.forEach((v, k)=>addProp(obj, v, values[k]));
+    return obj;
 }
 
-/
+function zipWith(...arrays) {
+    if(isArray(last(arrays))) return zip(...arrays);
+    let iteratee = createCallback(arrays.pop());
+    return zip(...arrays).map(x => iteratee(...x));
+}
+
 
 ///---- some utils
 
-function createCallback(c, thisArg) { //todo: thisArg does not wor
+function createCallback(c, thisArg) { //todo: thisArg does not work
     if (typeof c == "string") {
         return function(x) {
             return x[c];
