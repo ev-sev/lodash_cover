@@ -123,12 +123,11 @@ function differenceWith(...arrays) {
 }
 
 function drop(array, n = 1) {
-    return array.slice(_toInt(n, 0));
+    return array? array.slice(_toInt(n, 0)): [];
 }
 
-function dropRight(array, n) { 
-    if (dropRight.arguments.length == 1) n = 1;
-    return array.slice(0, array.length - _toInt(n, 0, array.length));
+function dropRight(array, n = 1) { 
+    return array? array.slice(0, array.length - _toInt(n, 0, array.length)): [];
 }
 
 function dropRightWhile(array, predicate) {
