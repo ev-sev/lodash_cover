@@ -1,3 +1,5 @@
+(function(LDCObject) {  // all functions moved to "__" instead  "_" 
+
 let lodash_cover_array = {
     chunk,
     compact,
@@ -61,7 +63,7 @@ let lodash_cover_array = {
     zipWith
 }
 
-Object.assign(__, lodash_cover_array);
+Object.assign(LDCObject, lodash_cover_array);
 
 function chunk(array, n) {
     n = _toInt(n, 0);
@@ -120,8 +122,7 @@ function differenceWith(...arrays) {
     return arrays.reduce((a, b) => differenceWith2(a, b, comparator));
 }
 
-function drop(array, n) {
-    if (drop.arguments.length == 1) n = 1;
+function drop(array, n = 1) {
     return array.slice(_toInt(n, 0));
 }
 
@@ -828,3 +829,5 @@ function noOne(arr, predicate) {
 }
 
 //--- logic utils end
+
+})(__);
