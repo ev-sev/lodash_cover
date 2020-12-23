@@ -770,11 +770,10 @@ function identity(x) {
 }
 
 function _toInt(n, minBound = Number.MIN_SAFE_INTEGER, maxBound = Number.MAX_SAFE_INTEGER) {
+    n = parseInt(n);
     if (n === NaN) return n;
     if (n === Infinity) return Infinity;
     if (n === -Infinity) return -Infinity;
-
-    n = parseInt(n);
     n = (n > minBound)? n: minBound;
     n = (n < maxBound)? n: maxBound;
     return n;

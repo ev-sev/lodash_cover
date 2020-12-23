@@ -1,13 +1,50 @@
 // description and some tests taken of https://lodash.com/docs/4.17.15
 
-describe("chunk", function() {
+let falsey = [, null, undefined, false, 0, NaN, ''];
+let stubArray = [];
 
-  it("Creates an array of elements split into groups the length of size. If array can't be split evenly, the final chunk will be the remaining elements.", 
-    function() {
-      assert.deepEqual(__.chunk(['a', 'b', 'c', 'd'], 2), _.chunk(['a', 'b', 'c', 'd'], 2));
-      assert.deepEqual(__.chunk(['a', 'b', 'c', 'd'], 3), _.chunk(['a', 'b', 'c', 'd'], 3));
+
+describe('chunk', function() {
+  let chunk = _.chunk;
+
+  var array = [0, 1, 2, 3, 4, 5];
+
+  it('should return chunked arrays', function() {
+    var actual = chunk(array, 3);
+    assert.deepEqual(actual, [[0, 1, 2], [3, 4, 5]]);
+  });
+
+  it('should return the last chunk as remaining elements', function() {
+    var actual = chunk(array, 4);
+    assert.deepEqual(actual, [[0, 1, 2, 3], [4, 5]]);
+  });
+
+  it('should treat falsey `size` values, except `undefined`, as `0`', function() {
+    var expected = _.map(falsey, function(value) {
+      return value === undefined ? [[0], [1], [2], [3], [4], [5]] : [];
     });
 
+    var actual = _.map(falsey, function(size, index) {
+      return index ? chunk(array, size) : chunk(array);
+    });
+
+    assert.deepEqual(actual, expected);
+  });
+
+  it('should ensure the minimum `size` is `0`', function() {
+    var values = _.reject(falsey, _.isUndefined).concat(-1, -Infinity),
+        expected = _.map(values, x=>stubArray);
+
+    var actual = _.map(values, function(n) {
+      return chunk(array, n);
+    });
+
+    assert.deepEqual(actual, expected);
+  });
+
+  it('should coerce `size` to an integer', function() {
+    assert.deepEqual(chunk(array, array.length / 4), [[0], [1], [2], [3], [4], [5]]);
+  });
 });
 
 describe("compact", function() {
